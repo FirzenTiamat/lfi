@@ -39,6 +39,17 @@ typedef struct {
     int fd;
 } Cwd;
 
+typedef struct {
+    uint32_t dstaddr;
+    uint32_t srcaddr;
+} CFLog;
+
+typedef struct {
+    size_t size;
+    size_t nextpos;
+    CFLog* cflogs;
+} CFBuffer;
+
 typedef struct LFIXProc {
     LFIProc* l_proc;
     uintptr_t base;
@@ -50,6 +61,8 @@ typedef struct LFIXProc {
 
     uintptr_t brkbase;
     size_t brksize;
+
+    CFBuffer* cfbuf;
 } LFIXProc;
 
 bool lfix_init(LFIXEngine* lfi);

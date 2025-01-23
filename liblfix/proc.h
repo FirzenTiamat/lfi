@@ -4,6 +4,7 @@
 
 enum {
     BRKMAXSIZE = 512ULL * 1024 * 1024,
+    CFBUFFSIZE = 16ULL * 1024 * 1024,
 };
 
 uintptr_t procaddr(LFIXProc* proc, uintptr_t addr);

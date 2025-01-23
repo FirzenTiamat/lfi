@@ -57,6 +57,7 @@ enum {
     LSYS_fchown            = 55,
     LSYS_fsync             = 82,
     LSYS_ftruncate         = 46,
+    LSYS_getcfbuf          = 499,
 };
 
 SyscallFn syscalls[SYS_max] = {
@@ -107,6 +108,7 @@ SyscallFn syscalls[SYS_max] = {
     [LSYS_fchown]            = sysignore_,
     [LSYS_fsync]             = sysignore_,
     [LSYS_ftruncate]         = sysignore_,
+    [LSYS_getcfbuf]          = sysgetcfbuf_,
 };
 
 _Static_assert(sizeof(syscalls) / sizeof(SyscallFn) <= SYS_max, "syscalls exceed SYS_max");

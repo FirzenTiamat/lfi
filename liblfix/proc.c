@@ -204,6 +204,15 @@ procsetup(LFIXProc* p, uint8_t* prog, size_t progsz, uint8_t* interp, size_t int
     if (brkregion == (void*) -1)
         return false;
 
+    // Alloc the cflog region.
+    void* cflogregion = lfi_proc_mapany(p->l_proc, CFBUFFSIZE, PROT_READ | PROT_WRITE, mapflags, -1, 0);
+    if (cflogregion == (void*) -1)
+        return false;
+    p->cfbuf = cflogregion;
+    p->cfbuf->size = (CFBUFFSIZE - sizeof(p->cfbuf->size) - sizeof(p->cfbuf->nextpos) ) / sizeof(CFLog);
+    p->cfbuf->nextpos = 0;
+    p->cfbuf->cflogs = (CFLog*) (cflogregion + sizeof(p->cfbuf->size) + sizeof(p->cfbuf->nextpos));
+
     return true;
 }
 

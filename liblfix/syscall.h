@@ -21,6 +21,7 @@
 #include "file.h"
 
 #include "syswrap.h"
+#include "useredis.h"
 
 static uintptr_t
 truncp(uintptr_t addr, size_t align)
@@ -559,3 +560,21 @@ syserror(LFIXProc* p)
     return -1;
 }
 SYSWRAP_0(syserror);
+
+static uintptr_t
+sysgetcfbuf(LFIXProc* p)
+{
+    if (!p->cfbuf || p->cfbuf->size == 0)
+        return 0;
+
+    if (p->cfbuf->nextpos >= p->cfbuf->size) {
+        int n = store_cfbuf(p);
+        if (n < 0)
+            return -1;
+
+        p->cfbuf->nextpos = 0;
+    }
+
+    return procuseraddr(p, (uintptr_t) p->cfbuf);
+}
+SYSWRAP_0(sysgetcfbuf);

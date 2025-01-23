@@ -10,10 +10,13 @@ mmap = subproject('libmmap').get_variable('mmap')
 
 subdir('arch/' + cpuarch)
 
+hiredisdir = meson.current_source_dir() + '/hiredis'
+hiredis_dep = meson.get_compiler('c').find_library('hiredis', dirs: hiredisdir)
+
 liblfix = static_library(
   'lfix',
   srcs,
-  dependencies: [mmap.as_link_whole(), liblfi_dep.as_link_whole(), liblfiv_dep],
+  dependencies: [mmap.as_link_whole(), liblfi_dep.as_link_whole(), liblfiv_dep, hiredis_dep, hiredis_dep],
   c_args: c_args_hardened + ['-fvisibility=hidden'],
   install: true,
 )
@@ -29,6 +32,6 @@ lfi_run_srcs = files(
 lfi_run = executable(
   'lfi-run',
   lfi_run_srcs,
-  dependencies: [liblfix_dep, mmap, liblfi_dep, liblfiv_dep, argp],
+  dependencies: [liblfix_dep, mmap, liblfi_dep, liblfiv_dep, argp, hiredis_dep],
   install: true,
 )
