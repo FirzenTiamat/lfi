@@ -6,6 +6,8 @@
 #include "lfix.h"
 #include "io.h"
 
+#include "useredis.h"
+
 static char doc[] = "lfi-run: LFI runner";
 
 static char args_doc[] = "INPUT...";
@@ -102,6 +104,9 @@ main(int argc, char** argv)
 
     uint64_t r = lfi_proc_start(p->l_proc);
     /* printf("exited: %ld\n", r); */
+
+    int n = store_cfbuf(p);
+    printf("lfi-run: exited: %ld, last flush %d cflogs.\n", r, n);
 
     return r;
 }

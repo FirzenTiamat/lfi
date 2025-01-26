@@ -1,0 +1,5 @@
+*.o
+*.ll
+*.objdump
+*.readelf
+*.nm

@@ -567,14 +567,12 @@ sysgetcfbuf(LFIXProc* p)
     if (!p->cfbuf || p->cfbuf->size == 0)
         return 0;
 
-    if (p->cfbuf->nextpos >= p->cfbuf->size) {
-        int n = store_cfbuf(p);
-        if (n < 0)
+    if (p->cfbuf->nextpos > 0) {
+        size_t n = store_cfbuf(p);
+        if (n == 0)
             return -1;
-
-        p->cfbuf->nextpos = 0;
     }
-
+    p->cfbuf->nextpos = 0;
     return procuseraddr(p, (uintptr_t) p->cfbuf);
 }
 SYSWRAP_0(sysgetcfbuf);

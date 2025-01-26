@@ -11,10 +11,18 @@
 #define REDIS_SERVER_TIMEOUT 1000000  // 1 second
 #define KEY_PREFIX "cflogs:"
 
-static int
+static size_t
 store_cfbuf(LFIXProc* p)
 {
     const CFBuffer* cfbuf = p->cfbuf;
+    if (cfbuf == NULL || cfbuf->size == 0){
+        fprintf(stderr, "CFBuffer is null or empty\n");
+        return 0;
+    }
+    if (cfbuf->nextpos > cfbuf->size) {
+        fprintf(stderr, "CFBuffer overflow: %lu\n", cfbuf->nextpos);
+        return 0;
+    }
     redisContext *c = redisConnectWithTimeout(REDIS_SERVER_IP, REDIS_SERVER_PORT, (struct timeval) {0, REDIS_SERVER_TIMEOUT});
     redisReply *reply;
     if (c == NULL || c->err) {
@@ -24,17 +32,17 @@ store_cfbuf(LFIXProc* p)
         } else {
             fprintf(stderr, "Connection error: can't allocate redis context\n");
         }
-        return -1;
+        return 0;
     }
-    for (size_t i = 0; i < cfbuf->nextpos && i < cfbuf->size; i++) {
+    for (size_t i = 0; i < cfbuf->nextpos; i++) {
         reply = (redisReply*)redisCommand(c, "RPUSH %s%p %p %p", KEY_PREFIX, p->base, cfbuf->cflogs[i].dstaddr, cfbuf->cflogs[i].srcaddr);
         if (reply == NULL) {
-            fprintf(stderr, "Error: %s\n", c->errstr);
+            fprintf(stderr, "RPUSH Error: %s\n", c->errstr);
             redisFree(c);
-            return -1;
+            return i;
         }
         freeReplyObject(reply);
     }
     redisFree(c);
-    return 0;
+    return cfbuf->nextpos;
 }
