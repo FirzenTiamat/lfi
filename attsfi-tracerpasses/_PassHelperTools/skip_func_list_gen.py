@@ -3,8 +3,15 @@
 # somewhere like the compile root folder of a project 
 # to allow libLLVMTracerPass.so to read at runtime.
 # file_path = 'PATH/ir_file_where_functions_should_be_skipped.ll'
+# have to extract on the -O0 ir file for all functions
 
-file_path = '../../t.ll'
+import sys
+
+if len(sys.argv) > 1:
+    file_path = sys.argv[1]
+else:
+    print('Usage: python3 <this> <ir_file_path>')
+    sys.exit(1)
 
 with open(file_path, 'r') as file:
     # read

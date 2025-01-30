@@ -111,13 +111,14 @@ bool TracerPass::doTrace(Function &FF)
 PreservedAnalyses TracerPass::run(Module &module, ModuleAnalysisManager &)
 {
 	readEdgeFuncList();
-	readExitFuncList();
+	// readExitFuncList();
 	readSkipFuncList();
 	for (auto &F: module){
 		if (isSkipInstrumentation(&F)){
 			continue;
 		}
 		doTrace(F);
+	}
 	return PreservedAnalyses::all();
 }
 
@@ -139,11 +140,11 @@ llvm::PassPluginLibraryInfo getTracerPassPluginInfo()
 					}
 					return false;
 				});
-			// PB.registerPipelineStartEPCallback(
-			// 	[](ModulePassManager &MPM, OptimizationLevel Level)
-			// 	{
-			// 		MPM.addPass(TracerPass());
-			// 	});
+			PB.registerPipelineStartEPCallback(
+				[](ModulePassManager &MPM, OptimizationLevel Level)
+				{
+					MPM.addPass(TracerPass());
+				});
 		}};
 }
 

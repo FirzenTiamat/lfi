@@ -3,3 +3,4 @@
 *.objdump
 *.readelf
 *.nm
+*.funclist

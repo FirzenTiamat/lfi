@@ -209,9 +209,9 @@ procsetup(LFIXProc* p, uint8_t* prog, size_t progsz, uint8_t* interp, size_t int
     if (cflogregion == (void*) -1)
         return false;
     p->cfbuf = cflogregion;
-    p->cfbuf->size = (CFBUFFSIZE - sizeof(p->cfbuf->size) - sizeof(p->cfbuf->nextpos) ) / sizeof(CFLog);
+    p->cfbuf->size = (CFBUFFSIZE - sizeof(p->cfbuf->size) - sizeof(p->cfbuf->nextpos) - sizeof(p->cfbuf->cflogs) ) / sizeof(CFLog);
     p->cfbuf->nextpos = 0;
-    p->cfbuf->cflogs = (CFLog*) (cflogregion + sizeof(p->cfbuf->size) + sizeof(p->cfbuf->nextpos));
+    p->cfbuf->cflogs = (CFLog*) (cflogregion + sizeof(p->cfbuf->size) + sizeof(p->cfbuf->nextpos) +  sizeof(p->cfbuf->cflogs));
 
     return true;
 }
