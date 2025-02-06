@@ -21,7 +21,8 @@
 #include "file.h"
 
 #include "syswrap.h"
-#include "useredis.h"
+// #include "useredis.h"
+#include "usememfile.h"
 
 static uintptr_t
 truncp(uintptr_t addr, size_t align)

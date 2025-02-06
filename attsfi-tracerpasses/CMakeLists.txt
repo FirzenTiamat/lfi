@@ -37,6 +37,6 @@ endif()
 
 
 add_subdirectory(InstPass)
-# add_subdirectory(AfterLinkOptPass)
+add_subdirectory(AfterLinkOptPass)
 
 target_link_libraries(LLVMTracerPass PUBLIC)
