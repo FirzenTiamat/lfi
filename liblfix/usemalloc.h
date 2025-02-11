@@ -28,7 +28,7 @@ static size_t
 store_cfbuf(LFIXProc* p)
 {
     const CFBuffer* pcfbuf = p->cfbuf;
-    const size_t cfbuffsize = pcfbuf->size * sizeof(CFLog) + sizeof(CFBuffer); //must equal to CFBUFFSIZE
+    const size_t cfbuffsize = pcfbuf->nextpos * sizeof(CFLog) + sizeof(CFBuffer); //must no more than CFBUFFSIZE
     if (pcfbuf == NULL || pcfbuf->size == 0){
         fprintf(stderr, "CFBuffer is null or empty\n");
         return 0;
