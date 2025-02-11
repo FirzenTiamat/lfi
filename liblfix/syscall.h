@@ -22,7 +22,8 @@
 
 #include "syswrap.h"
 // #include "useredis.h"
-#include "usememfile.h"
+// #include "usememfile.h"
+#include "usemalloc.h"
 
 static uintptr_t
 truncp(uintptr_t addr, size_t align)
@@ -569,9 +570,7 @@ sysgetcfbuf(LFIXProc* p)
         return 0;
 
     if (p->cfbuf->nextpos > 0) {
-        size_t n = store_cfbuf(p);
-        if (n == 0)
-            return -1;
+        store_cfbuf(p);
     }
     p->cfbuf->nextpos = 0;
     return procuseraddr(p, (uintptr_t) p->cfbuf);

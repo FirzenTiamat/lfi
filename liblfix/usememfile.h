@@ -11,6 +11,9 @@
 
 #include "lfix.h"
 
+// This file records the cflogs in a memory file using tmpfs.
+// if the file is not found, this step will be skipped to measure
+// the performance of the program without the overhead of storing.
 #define FILE_CFLOGS_PATH "/tmp/att-sfi/cflogs"
 
 static size_t
@@ -33,7 +36,7 @@ store_cfbuf(LFIXProc* p)
     
     int fd = open(FILE_CFLOGS_PATH, O_WRONLY | O_APPEND, 0666);
     if (fd < 0) {
-        fprintf(stderr, "Error opening file %s\n", FILE_CFLOGS_PATH);
+        // fprintf(stderr, "Error opening file %s\n", FILE_CFLOGS_PATH);
         return 0;
     }
     if (fcntl(fd, F_SETLKW, &lock) < 0) {

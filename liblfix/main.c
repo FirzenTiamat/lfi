@@ -6,7 +6,9 @@
 #include "lfix.h"
 #include "io.h"
 
-#include "useredis.h"
+// #include "useredis.h"
+// #include "usememfile.h"
+#include "usemalloc.h"
 
 static char doc[] = "lfi-run: LFI runner";
 
@@ -105,8 +107,13 @@ main(int argc, char** argv)
     uint64_t r = lfi_proc_start(p->l_proc);
     /* printf("exited: %ld\n", r); */
 
-    int n = store_cfbuf(p);
-    printf("lfi-run: exited: %ld, last flush %d cflogs.\n", r, n);
+/* ********************* use memfile or redis ******************* */
+    // size_t n = store_cfbuf(p);
+
+/* *************************** use malloc *********************** */
+    size_t n = dump_cfbuf_chain();
+
+    printf("lfi-run: exited: %ld, last flush %lu cflogs.\n", r, n);
 
     return r;
 }

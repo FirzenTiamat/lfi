@@ -49,21 +49,21 @@ static inline void cflow_logger(void* dst, void* src){
 }
 
 // 3 similar trace functions with different names for instrumentation and optimization
-void tracecall(void* dest_to){
+void __attribute__((noinline)) tracecall(void* dest_to){
     void *from = __builtin_return_address(0);
     // printf("tracecall: %p -> %p\n", from, dest_to);
     cflow_logger(dest_to, from);
     return;
 }
 
-void traceret(void* dest_to){
+void __attribute__((noinline)) traceret(void* dest_to){
     void *from = __builtin_return_address(0);
     // printf("traceret: %p -> %p\n", from, dest_to);
     cflow_logger(dest_to, from);
     return;
 }
 
-void traceindirectbr(void* dest_to){
+void __attribute__((noinline)) traceindirectbr(void* dest_to){
     void *from = __builtin_return_address(0);
     // printf("traceindirectbr: %p -> %p\n", from, dest_to);
     cflow_logger(dest_to, from);
