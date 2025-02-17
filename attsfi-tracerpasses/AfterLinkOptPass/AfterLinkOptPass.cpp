@@ -110,7 +110,7 @@ llvm::PassPluginLibraryInfo getAfterLinkOptPassPluginInfo() {
                   }
                   return false;
                 });
-            PB.registerPipelineStartEPCallback(
+            PB.registerOptimizerLastEPCallback(
                 [](ModulePassManager &MPM, OptimizationLevel Level) {
                   MPM.addPass(AfterLinkOptPass());
                 });

@@ -72,11 +72,12 @@ store_cfbuf(LFIXProc* p)
     cfbufchaintail->cfbuf = NULL;
     cfbufchaintail->next = NULL;
     // return the number of cflogs stored
+    // printf("store_cfbuf: %lu cflogs stored\n", pcfbuf->nextpos);
     return pcfbuf->nextpos;
 }
 
 static size_t 
-dump_cfbuf_chain()
+dump_cfbuf_chain(size_t *nodenum)
 {
     if (cfbufchainhead == NULL || cfbufchaintail == NULL) {
         fprintf(stderr, "CFBufferChain is not found\n");
@@ -113,6 +114,6 @@ dump_cfbuf_chain()
         free(node->cfbuf);
     }
     close(fd);
-
+    *nodenum = node_count;
     return cflog_count;
 }

@@ -6,12 +6,12 @@ static CFBuffer* cfbuf = NULL;
 static inline void flush_cfbuf(){
     cfbuf = (CFBuffer*) syscall(499);  //in liblfix/syscall.h and syscall.c of arm64
     // printf("cfbuf: %p, cfbuf.size: %zu, cfbuf.nextpos: %zu\n", cfbuf, cfbuf->size, cfbuf->nextpos);
-    if (cfbuf == NULL || cfbuf == (void*)-1){
-        exit(-1);
-    }
-    if (cfbuf->size <=0 || cfbuf->nextpos != 0){  //cfbuf->size
-        exit(-2);
-    }
+    // if (cfbuf == NULL || cfbuf == (void*)-1){
+    //     exit(-1);
+    // }
+    // if (cfbuf->size <=0 || cfbuf->nextpos != 0){  //cfbuf->size
+    //     exit(-2);
+    // }
     return;
 }
 
@@ -35,7 +35,7 @@ void pure_cfbuf(){
 static inline void cflow_logger(void* dst, void* src){
     // printf("cflow_logger: cfbuf: %p, cfbuf.cflogs: %p, cfbuf.size: %zu, cfbuf.nextpos: %zu\n", cfbuf, cfbuf->cflogs, cfbuf->size, cfbuf->nextpos);
     cfbuf->cflogs[cfbuf->nextpos++] = (CFLog){(uint32_t)(dst), (uint32_t)(src)};
-    // printf("cflow_logger: cflog[now].src: %p, cflog[now].dst: %p\n", cfbuf->cflogs[cfbuf->nextpos-1].srcaddr, cfbuf->cflogs[cfbuf->nextpos-1].dstaddr);
+    // printf("cflow_logger: cflog[%zu].src: %p, .dst: %p\n", cfbuf->nextpos-1, cfbuf->cflogs[cfbuf->nextpos-1].srcaddr, cfbuf->cflogs[cfbuf->nextpos-1].dstaddr);
 
     // cfbuf->cflogs[cfbuf->nextpos].srcaddr = (uint32_t)src;
     // cfbuf->cflogs[cfbuf->nextpos].dstaddr = (uint32_t)dst;

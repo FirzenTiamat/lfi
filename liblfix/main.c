@@ -111,9 +111,11 @@ main(int argc, char** argv)
     // size_t n = store_cfbuf(p);
 
 /* *************************** use malloc *********************** */
-    size_t n = dump_cfbuf_chain();
+    size_t nodenum = 0;
+    store_cfbuf(p);
+    size_t lognum = dump_cfbuf_chain(&nodenum);
 
-    printf("lfi-run: exited: %ld, last flush %lu cflogs.\n", r, n);
+    printf("lfi-run: exited: %ld, last flush %lu cflogs in %lu nodes\n", r, lognum, nodenum);
 
     return r;
 }
