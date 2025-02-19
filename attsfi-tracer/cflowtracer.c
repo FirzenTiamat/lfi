@@ -33,18 +33,30 @@ void pure_cfbuf(){
 }
 
 static inline void cflow_logger(void* dst, void* src){
+    // if (cfbuf == NULL)    {
+    // //     fprintf(stderr, "cflow_logger: cfbuf is NULL\n");
+    // //     exit(0);
+    //     flush_cfbuf();
+    //     // fprintf(stderr, "cflow_logger: cfbuf is NULL\n");
+    //     // if (cfbuf == NULL){
+    //     //     fprintf(stderr, "cflow_logger: cannot alloc cfbuf\n");
+    //     //     exit(0);
+    //     // }
+    // }
+    if (cfbuf != NULL && cfbuf->nextpos < /* 262114 */ cfbuf->size){
+        cfbuf->cflogs[cfbuf->nextpos++] = (CFLog){(uint32_t)(dst), (uint32_t)(src)};
+        return;
+    }
+    flush_cfbuf();
     // printf("cflow_logger: cfbuf: %p, cfbuf.cflogs: %p, cfbuf.size: %zu, cfbuf.nextpos: %zu\n", cfbuf, cfbuf->cflogs, cfbuf->size, cfbuf->nextpos);
-    cfbuf->cflogs[cfbuf->nextpos++] = (CFLog){(uint32_t)(dst), (uint32_t)(src)};
+    
     // printf("cflow_logger: cflog[%zu].src: %p, .dst: %p\n", cfbuf->nextpos-1, cfbuf->cflogs[cfbuf->nextpos-1].srcaddr, cfbuf->cflogs[cfbuf->nextpos-1].dstaddr);
 
     // cfbuf->cflogs[cfbuf->nextpos].srcaddr = (uint32_t)src;
     // cfbuf->cflogs[cfbuf->nextpos].dstaddr = (uint32_t)dst;
     // cfbuf->nextpos++;
     // printf("cflow_logger: nextpos = %zu\n", cfbuf->nextpos);
-    if (cfbuf->nextpos >= cfbuf->size){
-        // printf("cflow_logger: full and flush\n");
-        flush_cfbuf();
-    }
+
     return;
 }
 

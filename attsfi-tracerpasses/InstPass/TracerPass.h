@@ -86,7 +86,8 @@ public:
 		else{
 			LLVM_DEBUG(dbgs() << "Edge FuncList not found: "<< EDGE_FUNCLIST_FILE << "\n");
 			// errs() << "Edge FuncList not found.\n";
-			throw std::runtime_error("Edge FuncList not found.");
+			// throw std::runtime_error("Edge FuncList not found.");
+			edge_funcs.insert("main");  // default main
 		}
 		return;
 	}
@@ -104,7 +105,8 @@ public:
 		else{
 			LLVM_DEBUG(dbgs() << "Exit FuncList not found: "<< EXIT_FUNCLIST_FILE << "\n");
 			// errs() << "Exit FuncList not found.\n";
-			throw std::runtime_error("Exit FuncList not found.");
+			// throw std::runtime_error("Exit FuncList not found.");
+			exit_funcs.insert("main");  // default main
 		}
 		return;
 	}
@@ -121,7 +123,14 @@ public:
 		else{
 			LLVM_DEBUG(dbgs() << "Skip FuncList not found: skip.funclist\n");
 			// errs() << "Skip FuncList not found.\n";
-			throw std::runtime_error("Skip FuncList not found.");
+			// throw std::runtime_error("Skip FuncList not found.");
+			skip_funcs.insert("tracecall");
+			skip_funcs.insert("traceret");
+			skip_funcs.insert("traceindirectbr");
+			skip_funcs.insert("init_cfbuf");
+			skip_funcs.insert("pure_cfbuf");
+			skip_funcs.insert("flush_cfbuf");
+			skip_funcs.insert("cflow_logger");
 		}
 		return;
 	}

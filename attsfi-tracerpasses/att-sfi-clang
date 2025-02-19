@@ -1,0 +1,17 @@
+#!/bin/sh
+# want to work as a real clang
+# move to lfi llvm-toolchain bin install dir
+aarch64-lfi-linux-musl-clang \
+    -ffixed-x25 \
+    -Xclang -load -Xclang /home/tcwg/workspace-lw/att-sfi/lfi/attsfi-tracerpasses/build/InstPass/libLLVMTracerPass.so \
+    -Xclang -fpass-plugin=/home/tcwg/workspace-lw/att-sfi/lfi/attsfi-tracerpasses/build/InstPass/libLLVMTracerPass.so \
+    -Xclang -load -Xclang /home/tcwg/workspace-lw/att-sfi/lfi/attsfi-tracerpasses/build/AfterLinkOptPass/libafterlink.so \
+    -Xclang -fpass-plugin=/home/tcwg/workspace-lw/att-sfi/lfi/attsfi-tracerpasses/build/AfterLinkOptPass/libafterlink.so \
+    -I/home/tcwg/workspace-lw/att-sfi/lfi/attsfi-tracer \
+    -L/home/tcwg/workspace-lw/att-sfi/lfi/attsfi-tracer \
+    -lcflowtracer \
+    "$@" 
+
+#    -ffixed-x25 \
+#    -Xclang -load -Xclang /home/tcwg/workspace-lw/att-sfi/lfi/attsfi-tracerpasses/build/AfterLinkOptPass/libafterlink.so \
+#    -Xclang -fpass-plugin=/home/tcwg/workspace-lw/att-sfi/lfi/attsfi-tracerpasses/build/AfterLinkOptPass/libafterlink.so \

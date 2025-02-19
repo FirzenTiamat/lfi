@@ -23,10 +23,13 @@ CLANG_VI_FLAGS = -emit-llvm -S -fno-discard-value-names
 CLANG_FLAGS =  $(CLANG_VI_FLAGS) -mllvm --inline-threshold=10000  #-disable-O0-optnone
 LINKFLAGS += -fuse-ld=lld -flto 
 
-all: $(Target)
+all: $(Target) slib
 
 $(Target): $(Srouce)
 	$(CC) $(CFLAGS) -c $< -o $@
+
+slib: $(Target)
+	$(AR) -rc lib$(Name).a $(Target)
 
 .PHONY: ir
 ir: $(IRTarget)
