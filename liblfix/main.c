@@ -47,18 +47,19 @@ parse_opt(int key, char* arg, struct argp_state* state)
     case 'h':
         argp_state_help(state, state->out_stream, ARGP_HELP_STD_HELP);
         break;
-    case ARG_max_procs:
-        args->max_procs = true;
-        break;
-    case ARG_poc:
-        args->poc = true;
-        break;
-    case ARGP_KEY_ARG:
+    // case ARG_max_procs:
+    //     args->max_procs = true;
+    //     break;
+    // case ARG_poc:
+    //     args->poc = true;
+    //     break;
+    // case ARGP_KEY_ARG:
+    default:
         if (args->ninputs < INPUTMAX)
             args->inputs[args->ninputs++] = arg;
-        break;
-    default:
-        return ARGP_ERR_UNKNOWN;
+        // break;
+    // default:
+    //     return ARGP_ERR_UNKNOWN;
     }
 
     return 0;
@@ -71,7 +72,7 @@ Args args;
 int
 main(int argc, char** argv)
 {
-    argp_parse(&argp, argc, argv, ARGP_NO_HELP | ARGP_IN_ORDER, 0, &args);
+    // argp_parse(&argp, argc, argv, ARGP_SILENT | ARGP_IN_ORDER, 0, &args);
 
     LFIXEngine engine;
     bool b = lfix_init(&engine);
@@ -79,26 +80,30 @@ main(int argc, char** argv)
         fprintf(stderr, "error initializing: %s\n", lfi_strerror());
         return 1;
     }
-    if (args.poc)
-        engine.poc = true;
+    // if (args.poc)
+    //     engine.poc = true;
 
-    if (args.max_procs) {
-        printf("max processes: %ld\n", lfi_maxprocs(engine.l_engine));
-        return 1;
-    }
+    // if (args.max_procs) {
+    //     printf("max processes: %ld\n", lfi_maxprocs(engine.l_engine));
+    //     return 1;
+    // }
 
-    if (args.ninputs <= 0) {
-        fprintf(stderr, "no input file provided\n");
-        return 1;
-    }
+    // if (args.ninputs <= 0) {
+    //     fprintf(stderr, "no input file provided\n");
+    //     return 1;
+    // }
 
-    Buf f = bufreadfile(args.inputs[0]);
+    // for (size_t i = 0; i < argc; i++){
+    //     fprintf(stderr, "%s\n", argv[i]);
+    // }
+
+    Buf f = bufreadfile(argv[1]);
     if (!f.data) {
-        fprintf(stderr, "error opening %s: %s\n", args.inputs[0], strerror(errno));
+        fprintf(stderr, "error opening %s: %s\n", argv[1], strerror(errno));
         return 1;
     }
 
-    LFIXProc* p = lfix_proc_newfile(&engine, f.data, f.size, args.ninputs, &args.inputs[0]);
+    LFIXProc* p = lfix_proc_newfile(&engine, f.data, f.size, argc - 1, &argv[1]);
     if (!p) {
         fprintf(stderr, "error creating process: %s\n", lfi_strerror());
         return 1;

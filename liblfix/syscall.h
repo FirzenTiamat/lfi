@@ -566,13 +566,16 @@ SYSWRAP_0(syserror);
 static uintptr_t
 sysgetcfbuf(LFIXProc* p)
 {
-    if (!p->cfbuf || p->cfbuf->size == 0)
+    if (!p->cfbuf || p->cfbuf->size == 0) {
+        // fprintf(stderr, "CFBuffer is null or empty\n");
         return 0;
-
+    }
     if (p->cfbuf->nextpos > 0) {
+        // fprintf(stderr, "CFBuffer storing: %lu\n", p->cfbuf->nextpos);
         store_cfbuf(p);
     }
     p->cfbuf->nextpos = 0;
+    // fprintf(stderr, "CFBuffer location return: %p\n", procuseraddr(p, (uintptr_t) p->cfbuf));
     return procuseraddr(p, (uintptr_t) p->cfbuf);
 }
 SYSWRAP_0(sysgetcfbuf);
