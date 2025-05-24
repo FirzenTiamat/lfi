@@ -1,5 +1,4 @@
 // AArch64AttsfiTraceret.cpp
-// Low level instrumentation to trace accurate return address. See the comment in CMakeLists.txt
 #include "AArch64.h"
 #include "AArch64InstrInfo.h"
 #include "AArch64RegisterInfo.h"
@@ -74,14 +73,45 @@ namespace {
       for (auto &MBB : MF) {
         for (auto &MI : MBB) {
           if (MI.getOpcode() == AArch64::RET) {
+            // mov x27, x0; save the value of x0
+            BuildMI(MBB, MI, DebugLoc(), TII->get(AArch64::ORRXrs))
+            .addReg(AArch64::X27)
+            .addReg(AArch64::XZR)
+            .addReg(AArch64::X0)
+            .addImm(0);
+
+            // mov x0, x30; argument for traceret
             BuildMI(MBB, MI, DebugLoc(), TII->get(AArch64::ORRXrs))
             .addReg(AArch64::X0)
             .addReg(AArch64::XZR)
             .addReg(AArch64::LR)
             .addImm(0);
 
+            // mov x26, x30; save the value of x30
+            BuildMI(MBB, MI, DebugLoc(), TII->get(AArch64::ORRXrs))
+            .addReg(AArch64::X26)
+            .addReg(AArch64::XZR)
+            .addReg(AArch64::LR)
+            .addImm(0);
+
+            // bl traceret; call traceret
             BuildMI(MBB, MI, DebugLoc(), TII->get(AArch64::BL))
             .addExternalSymbol(TRACERET_SYMBOL);
+
+            // mov x30, x26; restore the value of x30
+            BuildMI(MBB, MI, DebugLoc(), TII->get(AArch64::ORRXrs))
+            .addReg(AArch64::LR)
+            .addReg(AArch64::XZR)
+            .addReg(AArch64::X26)
+            .addImm(0);
+
+            // mov x0, x27; restore the value of x0
+            BuildMI(MBB, MI, DebugLoc(), TII->get(AArch64::ORRXrs))
+            .addReg(AArch64::X0)
+            .addReg(AArch64::XZR)
+            .addReg(AArch64::X27)
+            .addImm(0);
+
             Modified = true;
           }
         }

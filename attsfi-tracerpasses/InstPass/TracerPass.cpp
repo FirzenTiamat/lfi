@@ -93,7 +93,7 @@ bool TracerPass::doTrace(Function &FF)
 				instrumentCall(*m, *CI);
 			}
 			else if (auto *RI = dyn_cast<ReturnInst>(&inst)){
-				instrumentRet(*m, *RI);
+				// instrumentRet(*m, *RI);
 			}
 			else if (auto *IBI = dyn_cast<IndirectBrInst>(&inst)){
 				instrumentIndirectBr(*m, *IBI);
