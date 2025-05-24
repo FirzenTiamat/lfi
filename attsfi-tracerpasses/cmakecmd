@@ -1,6 +1,6 @@
 # in build dir:
-cmake -DCMAKE_C_COMPILER=/home/tcwg/workspace-lw/att-sfi/lfi-llvm-toolchain/build-llvm-aarch64-lfi-base/bin/clang -DCMAKE_CXX_COMPILER=/home/tcwg/workspace-lw/att-sfi/lfi-llvm-toolchain/build-llvm-aarch64-lfi-base/bin/clang++ ..
+#cmake -DCMAKE_C_COMPILER=/home/tcwg/workspace-lw/att-sfi/lfi-llvm-toolchain/build-llvm-aarch64-lfi-base/bin/clang -DCMAKE_CXX_COMPILER=/home/tcwg/workspace-lw/att-sfi/lfi-llvm-toolchain/build-llvm-aarch64-lfi-base/bin/clang++ -DLT_LLVM_INSTALL_DIR=/home/tcwg/workspace-lw/att-sfi/lfi-llvm-toolchain/build-llvm-aarch64-lfi-base ..
 
 cmake -DCMAKE_C_COMPILER=/usr/local/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/bin/clang++ ..
 
-cmake -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ ..
+cmake -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DLT_LLVM_INSTALL_DIR=/home/tcwg/workspace-lw/llvm-releases/llvm-19.1.4-release/clang+llvm-19.1.4-aarch64-linux-gnu/ ..
